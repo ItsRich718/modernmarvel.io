@@ -1,7 +1,13 @@
 # Deploying
 
-Deploys are manual and per-folder. Nothing in this repo publishes itself, and
-pushing to GitHub changes nothing on the live site.
+**Pushing to `main` deploys.** Both Workers are connected to this repository
+via Workers Builds, so a merged change to `home/` or `digest/` publishes itself
+within a minute or two. Nothing asks you to confirm.
+
+The manual route below still works and is still the right tool for a deploy you
+want to watch happen — a routing change, or anything you would rather not
+discover through CI. The Workers Builds settings are documented at the end of
+this file.
 
 ## One-time setup
 
@@ -42,7 +48,11 @@ with no server and no internet:
 
 Click through the Archive and About links and confirm they resolve.
 
-## Deploy
+## Deploying by hand
+
+You do not need this for an ordinary content change — pushing to `main` is
+enough. Use it when you want to see the output, which mainly means routing
+changes.
 
 Move into the folder for whichever Worker you changed, and run one command.
 
@@ -136,12 +146,19 @@ cannot touch it.
 Wrangler is on the day the build runs. Known-good version as of this writing
 is **4.128.0**, which is what the config files were validated against.
 
-To pin it, set the deploy commands to `npx wrangler@4.128.0 deploy` and
-`npx wrangler@4.128.0 versions upload`. This trades automatic updates for
+Both connections are pinned to `4.128.0`, which is the version the routing
+config was validated against and the version that performed the first
+successful CI deploy of each Worker.
+
+To change the pin, edit the deploy commands in the dashboard. Bump one Worker,
+run the verification checklist below, and only then bump the other. This trades automatic updates for
 reproducible builds, and it has to be bumped by hand. Given that a deploy
 reconciles live routing, reproducible is the safer default.
 
 ## Order of connection
+
+Both Workers are connected as of 2026-09-04; this section is kept as the record
+of why it was done in this order.
 
 Connect `modernmarvel-home` first. Its route is an ordinary route that owns no
 DNS record, so a bad reconciliation there is recoverable.
@@ -151,18 +168,24 @@ to succeed. Connecting starts a build straight away, and that build runs
 `wrangler deploy`, which reconciles the apex Custom Domain. CI cannot answer a
 prompt if Wrangler asks one.
 
-## Verifying the first build
+## Verifying a deploy
 
-The repository was seeded from the folders the site was already deployed
-from, so the first production build of each Worker should change nothing that
-is visible. After each one:
+Run this after any deploy that touched `digest/`, and after any change to a
+config file. It is four URLs and takes a minute.
 
-1. Confirm the build succeeded in **Settings** > **Builds**.
-2. Load `modernmarvel.io/` and `modernmarvel.io/ai-digest` in a private window.
-3. Load `modernmarvel.io/nonsense` and confirm it still returns the digest's
-   404 page. This is the check that proves the apex Custom Domain survived,
-   and it is the one most easily forgotten.
+Make the unmatched path a **fresh** one each time. Re-using a path you have
+already loaded can return a cached 404 and tell you nothing.
 
-If step 3 fails, the Custom Domain was dropped. Re-add it in the dashboard
-under **modernmarvel-io** > **Settings** > **Domains & Routes** before doing
-anything else.
+1. Confirm the build succeeded in **Settings** > **Builds**, and that a new
+   deployment appeared -- not just a green build. `npx wrangler deployments
+   list` from the folder shows this.
+2. `modernmarvel.io/` returns the landing page.
+3. `modernmarvel.io/ai-digest` returns the current edition.
+4. `modernmarvel.io/ai-digest/archive/` returns the archive index.
+5. `modernmarvel.io/<something-random>` returns the digest's 404 page. This is
+   the check that proves the apex Custom Domain survived, and it is the one
+   most easily forgotten.
+
+If step 5 fails, the Custom Domain was dropped and the whole apex is at risk.
+Re-add it under **modernmarvel-io** > **Settings** > **Domains & Routes**
+before doing anything else.

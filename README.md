@@ -74,11 +74,22 @@ it today; it is recorded here so it is a decision rather than a surprise.
 
 ## Status
 
+Both phases are complete.
+
 Phase 1: source under version control, matching what is deployed.
 
-Phase 2 (not yet done): connect each Worker to this repo via Workers Builds so
-that merging to `main` deploys and branches produce preview URLs. Until then,
-deploys are manual. **Committing here does not publish anything.**
+Phase 2: both Workers are connected to this repository via Workers Builds.
+
+**Pushing to `main` publishes the site.** A commit touching `home/` deploys
+`modernmarvel-home`; a commit touching `digest/` deploys `modernmarvel-io`.
+Build watch paths keep the two independent, so a change to one cannot trigger a
+deploy of the other. There is no review step and no confirmation prompt.
+
+Commits on other branches build too, but run `wrangler versions upload` rather
+than `wrangler deploy`. That produces a preview URL and **does not touch routes
+or Custom Domains** — which is the safety property that matters here, since it
+means no branch can take the apex down. It also means routing changes are not
+verified by a preview. They land unproven on `main`.
 
 ## Deploying
 

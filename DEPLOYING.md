@@ -93,3 +93,76 @@ If you need to confirm what is actually live, open each Worker in the Cloudflare
 dashboard under **Settings → Domains & Routes**. While the site is working,
 Cloudflare is correct by definition — change the config file to match it, not
 the other way around, and commit that change.
+
+---
+
+# Workers Builds (CI)
+
+These settings live in the Cloudflare dashboard, not in this repo. They are
+recorded here so that the configuration is written down somewhere you can
+diff, which is the same reason the routes are declared in the config files.
+
+Each Worker gets its own connection to this one repository, distinguished by
+its root directory.
+
+## Settings
+
+| Setting                    | `modernmarvel-home` | `modernmarvel-io`   |
+|----------------------------|---------------------|---------------------|
+| Repository                 | `ItsRich718/modernmarvel.io` | same       |
+| Production branch          | `main`              | `main`              |
+| **Root directory**         | `home`              | `digest`            |
+| Build command              | *(leave empty)*     | *(leave empty)*     |
+| Deploy command             | `npx wrangler deploy` | `npx wrangler deploy` |
+| Non-prod deploy command    | `npx wrangler versions upload` | same     |
+| Build watch paths: include | `home/*`            | `digest/*`          |
+
+The build command is empty on purpose. Both Workers are assets-only, there is
+nothing to compile, and there is no `package.json` in this repository.
+
+**Root directory is the setting that makes this work.** There is no config
+file at the repository root, so a build that runs from the root will fail to
+find one. Each connection must point at its own folder.
+
+**Watch paths matter more than they look.** Without them, every push rebuilds
+and redeploys both Workers, so editing the landing page would trigger a
+deploy of the digest — and a digest deploy is the one that reconciles the
+apex Custom Domain. Scope each Worker to its own folder so unrelated commits
+cannot touch it.
+
+## Wrangler version
+
+`npx wrangler deploy` with no `package.json` resolves to whatever the latest
+Wrangler is on the day the build runs. Known-good version as of this writing
+is **4.128.0**, which is what the config files were validated against.
+
+To pin it, set the deploy commands to `npx wrangler@4.128.0 deploy` and
+`npx wrangler@4.128.0 versions upload`. This trades automatic updates for
+reproducible builds, and it has to be bumped by hand. Given that a deploy
+reconciles live routing, reproducible is the safer default.
+
+## Order of connection
+
+Connect `modernmarvel-home` first. Its route is an ordinary route that owns no
+DNS record, so a bad reconciliation there is recoverable.
+
+Connect `modernmarvel-io` second, and only after a deploy of it has been seen
+to succeed. Connecting starts a build straight away, and that build runs
+`wrangler deploy`, which reconciles the apex Custom Domain. CI cannot answer a
+prompt if Wrangler asks one.
+
+## Verifying the first build
+
+The repository was seeded from the folders the site was already deployed
+from, so the first production build of each Worker should change nothing that
+is visible. After each one:
+
+1. Confirm the build succeeded in **Settings** > **Builds**.
+2. Load `modernmarvel.io/` and `modernmarvel.io/ai-digest` in a private window.
+3. Load `modernmarvel.io/nonsense` and confirm it still returns the digest's
+   404 page. This is the check that proves the apex Custom Domain survived,
+   and it is the one most easily forgotten.
+
+If step 3 fails, the Custom Domain was dropped. Re-add it in the dashboard
+under **modernmarvel-io** > **Settings** > **Domains & Routes** before doing
+anything else.

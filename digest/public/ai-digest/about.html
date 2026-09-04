@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About the AI Digest. Modern Marvel</title>
+<meta name="description" content="How the AI Digest is assembled, what it counts, and what it deliberately excludes.">
+<style>
+:root{
+ --bg:#EEF2F7; --glass:rgba(255,255,255,0.70); --glass-subtle:rgba(255,255,255,0.50);
+ --glass-strong:rgba(255,255,255,0.85); --line:rgba(148,163,184,0.30);
+ --tx:#0F172A; --tx2:#475569; --accent:#0E7490; --good:#14653A; --warn:#92400E; --alert:#B91C1C;
+ --r:14px; --sh:0 4px 30px rgba(0,0,0,0.03);
+ --col:74rem;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+ margin:0; background:var(--bg); color:var(--tx);
+ background-image:radial-gradient(60rem 40rem at 8% -10%, rgba(14,116,144,0.08), rgba(14,116,144,0) 70%);
+ background-attachment:fixed;
+ font:17px/1.68 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+ font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:var(--col);margin:0 auto;padding:0 1.25rem}
+/* Fluid gutters: the column simply shrinks to fit any screen. */
+@media (max-width:48rem){.wrap{padding:0 1rem}}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3{line-height:1.24;letter-spacing:-0.011em;margin:0}
+/* ---------- constant shell ---------- */
+.masthead{background:var(--glass-strong);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--line)}
+.mast-in{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:baseline;justify-content:space-between;padding:1.15rem 0}
+.brand{font-size:1.32rem;font-weight:700;letter-spacing:-0.02em;color:var(--tx);text-decoration:none}
+.brand span{color:var(--accent)}
+.credit{font-size:.8rem;color:var(--tx2)}
+nav ul{display:flex;flex-wrap:wrap;gap:.25rem;list-style:none;margin:0;padding:0}
+nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 .8rem;border-radius:9px;font-size:.9rem;font-weight:600;text-decoration:none}
+nav a[aria-current="page"]{background:rgba(14,116,144,0.10);color:var(--accent)}
+.varbar{background:var(--glass-subtle);border-bottom:1px solid var(--line);font-size:.82rem;color:var(--tx2)}
+.varbar div{padding:.6rem 0}
+.varbar b{color:var(--tx);font-weight:600}
+/* ---------- edition body ---------- */
+main{padding:2.4rem 0 1rem}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:0 0 .55rem}
+.lede{font-size:clamp(1.55rem,1.1rem + 1.6vw,2.05rem);font-weight:700;letter-spacing:-0.021em;max-width:none;text-wrap:balance}
+.standfirst{margin:.9rem 0 0;font-size:1.06rem;color:var(--tx2);max-width:none}
+section{margin:2.6rem 0 0}
+section>h2{font-size:clamp(1.15rem,1rem + .5vw,1.4rem);margin:0 0 .35rem;max-width:none;text-wrap:balance}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--tx2);margin:0 0 .5rem}
+p{margin:.7rem 0;max-width:none;text-wrap:pretty}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.7rem;margin:1.6rem 0 0;padding:0;list-style:none}
+.stat{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:.95rem 1rem;display:flex;flex-direction:column}
+.stat dt{font-size:.76rem;color:var(--tx2);margin:0 0 .3rem;min-height:3.4em}
+.stat dd{margin:auto 0 0;font-size:1.62rem;font-weight:700;letter-spacing:-0.02em}
+.stat .sub{display:block;font-size:.76rem;font-weight:500;color:var(--tx2);letter-spacing:0;min-height:3.4em}
+.card{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:1.15rem 1.25rem;margin:.85rem 0}
+.card h3{font-size:1.06rem;margin:0 0 .1rem}
+.meta{font-size:.82rem;color:var(--tx2);margin:.3rem 0 .7rem}
+.badges{display:flex;flex-wrap:wrap;gap:.4rem;margin:.55rem 0 0;padding:0;list-style:none}
+.badge{font-size:.75rem;font-weight:600;padding:.24rem .55rem;border-radius:999px;border:1px solid var(--line);background:var(--glass-subtle);color:var(--tx2)}
+.badge.ind{border-color:rgba(14,116,144,0.4);background:rgba(14,116,144,0.09);color:#0b5c72}
+.ev{margin:.55rem 0 0;padding:0 0 0 1.05rem}
+.ev li{margin:.34rem 0;text-wrap:pretty}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:.85rem 0 0}
+@media (max-width:56rem){.two{grid-template-columns:1fr}}
+.side{background:var(--glass-subtle);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem}
+.side h4{margin:0 0 .35rem;font-size:.95rem}
+.side .who{font-size:.8rem;color:var(--tx2);margin:0 0 .5rem}
+.quiet{background:var(--glass-subtle);border:1px dashed var(--line);border-radius:var(--r);padding:1.05rem 1.15rem}
+.quiet h2{font-size:1.08rem;color:var(--tx2);max-width:none}
+.quiet p,.card p,.card h3,.side p,.side h4{max-width:none}
+.quiet{width:100%}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--glass-strong);margin:1rem 0 0}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.9rem}
+caption{text-align:left;padding:.85rem 1rem .1rem;font-size:.82rem;color:var(--tx2)}
+th,td{text-align:left;padding:.6rem 1rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--tx2);font-weight:700}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+.s-up{color:var(--good);font-weight:700}
+.s-dn{color:var(--warn);font-weight:700}
+.s-fl{color:var(--tx2);font-weight:700}
+ol.crit{margin:.6rem 0 0;padding-left:1.15rem}
+ol.crit li{margin:.5rem 0;max-width:none}
+footer{margin:3rem 0 0;border-top:1px solid var(--line);background:var(--glass-subtle)}
+footer .wrap{padding-top:1.6rem;padding-bottom:2.4rem}
+footer h2{font-size:.98rem;margin:0 0 .5rem}
+footer p,footer li{font-size:.86rem;color:var(--tx2);max-width:none}
+footer ul{margin:.4rem 0;padding-left:1.15rem}
+.fine{font-size:.8rem;color:var(--tx2);margin-top:1.3rem}
+@media print{body{background:#fff}.card,.stat,.tw{box-shadow:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" style="position:absolute;left:-9999px;top:0;background:#fff;padding:.6rem 1rem;border-radius:8px;z-index:9" onfocus="">Skip to content</a>
+<header class="masthead">
+ <div class="wrap mast-in">
+  <div>
+   <a class="brand" href="/ai-digest/">Modern <span>Marvel</span></a>
+   <div class="credit">The AI Digest. Designed by Rich Nichols.</div>
+  </div>
+  <nav aria-label="Sections"><ul><li><a href="/ai-digest/">Current edition</a></li><li><a href="/ai-digest/archive/">Archive</a></li><li><a href="/ai-digest/about.html" aria-current="page">About</a></li></ul></nav>
+ </div>
+</header>
+<div class="varbar"><div class="wrap"><b>Standard view.</b> The design-experiment generator is on a scheduled pause, keeping the focus entirely on the core data.</div></div>
+<main id="main"><div class="wrap">
+
+<p class="eyebrow">About</p>
+<h1 class="lede">A weekly design practice with a public forcing function</h1>
+<p class="standfirst">Modern Marvel publishes one edition a week. Each edition applies a different design directive to the same system and the same kind of data, so the archive becomes a gallery of design arguments rather than a run of back issues. The analysis is real and the method is published, because a dashboard that hides how its data was gathered is a worse portfolio piece, not a better one.</p>
+
+<section>
+<p class="kicker">Who this is for</p>
+<h2>Written for an AI-curious reader, not only for practitioners</h2>
+<p>Operators in financial services and people building with AI are the core readership, but every page is written to be legible to an educated reader outside the field. Where the method uses a term of art, the term is defined on the page rather than assumed.</p>
+</section>
+
+<section>
+<p class="kicker">The method</p>
+<h2>Agreement between independent sources is the product, not coverage volume</h2>
+<p>A fixed set of newsletters is read every weekday. Each item is reduced to a claim of twenty words or fewer and tagged against a fixed vocabulary of ten themes. Nothing is summarized newsletter by newsletter, because that measures how much was published rather than what is true.</p>
+<p>Each source carries an independence class. An <b>aggregator</b> reports the day's news and works the same press cycle as every other aggregator. A <b>primary analysis</b> title makes its own argument and would still have something to say in a quiet week. Three aggregators reporting the same launch is one press release counted three times.</p>
+<p>Before anything is counted, three collapses are applied:</p>
+<ul>
+<li><b>One sighting per publisher per day.</b> A title that runs six items on one subject in one issue has said one thing.</li>
+<li><b>One count per publisher.</b> Newsletter operators increasingly run several titles. Without this rule, a house view repeated across four of them scores as four-way agreement, which is a publishing strategy detecting itself.</li>
+<li><b>Sponsored placements carry volume, never independence.</b> A paid listing is bought, not reasoned. It appears in the volume figure and is removed before publishers and classes are counted.</li>
+</ul>
+<p>Inside a rolling seven days, a theme is <b>converging</b> when at least three collapsed sightings, at least three publishers and at least two independence classes carry it. It is <b>contested</b> when sources carry it with opposing valence, which is the most interesting state the system produces and is published rather than resolved. Everything else is an <b>echo</b>: real coverage volume, reported with its count and never with a conclusion.</p>
+<p>The system needs at least three active sources spanning at least two independence classes for convergence to be possible at all. That floor is checked and stated every week, because "nothing converged" and "nothing could converge" are different statements and only one of them is about the AI industry.</p>
+</section>
+
+<section>
+<p class="kicker">Known bias</p>
+<h2>Two of the three independent voices are finance publications</h2>
+<p>The independence base is deliberately small and it is not neutral. Two of the three primary analysis titles cover corporate finance and accounting, so themes that touch disclosure, cost structure and workforce composition have an easier path to convergence than themes that do not. A theme in, say, consumer product or robotics can be real and still never clear the bar here, simply because no independent title in this set covers that beat.</p>
+<p>The other structural limit is timing. All three independent titles publish weekly, on three different weekdays, so every converging theme expires on its own author's next publication day. Each edition states which issues are holding the week's findings up.</p>
+<p>Sources are named by title. Coverage is drawn from a personal newsletter subscription list, not from any employer, system or colleague.</p>
+</section>
+
+<section>
+<p class="kicker">The design premise</p>
+<h2>The variation is the show, and the shell never varies</h2>
+<p>Each edition applies one directive from a fixed rotation: typographic hierarchy, data-density inversion, single-column narrative, chart-forward, editorial, monochrome discipline, progressive disclosure, comparison-first. A directive may not repeat inside 28 days. The applied variation is named at the top of every edition, because unlabeled change reads as inconsistency while labeled change reads as intent.</p>
+<p>The directive governs layout and emphasis only. The masthead, navigation, archive, this page, the designer credit and the footer are a constant shell. Without a constant shell there is no publication for the variation to vary against, only a series of unrelated pages. Changing the color system is not a variation; it is abandoning the design system.</p>
+<p>The accessibility floor holds regardless of the directive: 4.5 to 1 contrast, visible focus rings, full keyboard operability, 44 pixel touch targets, and status never carried by color alone. Every edition is a single self-contained file with no scripts, no external fonts, no images, no analytics and no tracking. It renders identically offline.</p>
+<p>When a week's design cannot be done properly, the edition ships in a <b>reduced format</b>, labeled as such, rather than not shipping. A gap in the archive damages the premise more than a plain edition does.</p>
+</section>
+
+<section>
+<p class="kicker">Every edition publishes its own critique</p>
+<h2>Three questions, answered on the page</h2>
+<p>What was the design decision this week, and did the data support it or fight it? What would a designer criticize first? Which section earned its space least? A gallery without critique is a portfolio. A gallery with critique is a practice.</p>
+<p>Editions are immutable once published. A past edition is never retro-edited to fix a design since outgrown, because that destroys the record the archive exists to keep.</p>
+</section>
+
+</div></main>
+<footer><div class="wrap">
+
+<h2>How this edition was assembled</h2>
+<p>Seven newsletters reported inside the rolling seven-day window to September 1, 2026: four aggregators (TLDR AI, GenAI Works, The Rundown AI, Superhuman AI) and three primary analysis titles (Import AI, Cook's Playbooks, The CFO Desk). One aggregator title on the source list has published nothing since August 1 and contributed nothing.</p>
+<ul>
+<li><b>Convergence floor:</b> met. Seven publishers and both independence classes reported inside the window.</li>
+<li><b>Independent evidence:</b> only two publishers supplied any. The CFO Desk published on cadence and contributed none, because its single tagged item was a paid placement and the sponsored rule removes those before independence is counted.</li>
+<li><b>Volume:</b> 216 raw sightings. Every figure on this page is reported after collapse, never as a raw count alone.</li>
+<li><b>Sponsored:</b> 32 of 216 sightings, 14.8 percent, were paid placements. They count toward volume and never toward publisher or independence counts.</li>
+<li><b>Known gap:</b> a scheduled capture did not run on August 31 and was recovered by hand on September 1. No edition was lost, but the record shows the gap.</li>
+</ul>
+<p class="fine">Modern Marvel is a personal design practice. Views are the author's own and are not those of any employer. Nothing here is investment, legal, or professional advice. Designed by Rich Nichols.</p>
+
+</div></footer>
+</body>
+</html>

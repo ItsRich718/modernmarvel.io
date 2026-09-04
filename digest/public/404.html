@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found. Modern Marvel</title>
+<meta name="description" content="That page is not here.">
+<style>
+:root{
+ --bg:#EEF2F7; --glass:rgba(255,255,255,0.70); --glass-subtle:rgba(255,255,255,0.50);
+ --glass-strong:rgba(255,255,255,0.85); --line:rgba(148,163,184,0.30);
+ --tx:#0F172A; --tx2:#475569; --accent:#0E7490; --good:#14653A; --warn:#92400E; --alert:#B91C1C;
+ --r:14px; --sh:0 4px 30px rgba(0,0,0,0.03);
+ --col:74rem;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+ margin:0; background:var(--bg); color:var(--tx);
+ background-image:radial-gradient(60rem 40rem at 8% -10%, rgba(14,116,144,0.08), rgba(14,116,144,0) 70%);
+ background-attachment:fixed;
+ font:17px/1.68 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+ font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:var(--col);margin:0 auto;padding:0 1.25rem}
+/* Fluid gutters: the column simply shrinks to fit any screen. */
+@media (max-width:48rem){.wrap{padding:0 1rem}}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3{line-height:1.24;letter-spacing:-0.011em;margin:0}
+/* ---------- constant shell ---------- */
+.masthead{background:var(--glass-strong);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--line)}
+.mast-in{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:baseline;justify-content:space-between;padding:1.15rem 0}
+.brand{font-size:1.32rem;font-weight:700;letter-spacing:-0.02em;color:var(--tx);text-decoration:none}
+.brand span{color:var(--accent)}
+.credit{font-size:.8rem;color:var(--tx2)}
+nav ul{display:flex;flex-wrap:wrap;gap:.25rem;list-style:none;margin:0;padding:0}
+nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 .8rem;border-radius:9px;font-size:.9rem;font-weight:600;text-decoration:none}
+nav a[aria-current="page"]{background:rgba(14,116,144,0.10);color:var(--accent)}
+.varbar{background:var(--glass-subtle);border-bottom:1px solid var(--line);font-size:.82rem;color:var(--tx2)}
+.varbar div{padding:.6rem 0}
+.varbar b{color:var(--tx);font-weight:600}
+/* ---------- edition body ---------- */
+main{padding:2.4rem 0 1rem}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:0 0 .55rem}
+.lede{font-size:clamp(1.55rem,1.1rem + 1.6vw,2.05rem);font-weight:700;letter-spacing:-0.021em;max-width:none;text-wrap:balance}
+.standfirst{margin:.9rem 0 0;font-size:1.06rem;color:var(--tx2);max-width:none}
+section{margin:2.6rem 0 0}
+section>h2{font-size:clamp(1.15rem,1rem + .5vw,1.4rem);margin:0 0 .35rem;max-width:none;text-wrap:balance}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--tx2);margin:0 0 .5rem}
+p{margin:.7rem 0;max-width:none;text-wrap:pretty}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.7rem;margin:1.6rem 0 0;padding:0;list-style:none}
+.stat{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:.95rem 1rem;display:flex;flex-direction:column}
+.stat dt{font-size:.76rem;color:var(--tx2);margin:0 0 .3rem;min-height:3.4em}
+.stat dd{margin:auto 0 0;font-size:1.62rem;font-weight:700;letter-spacing:-0.02em}
+.stat .sub{display:block;font-size:.76rem;font-weight:500;color:var(--tx2);letter-spacing:0;min-height:3.4em}
+.card{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:1.15rem 1.25rem;margin:.85rem 0}
+.card h3{font-size:1.06rem;margin:0 0 .1rem}
+.meta{font-size:.82rem;color:var(--tx2);margin:.3rem 0 .7rem}
+.badges{display:flex;flex-wrap:wrap;gap:.4rem;margin:.55rem 0 0;padding:0;list-style:none}
+.badge{font-size:.75rem;font-weight:600;padding:.24rem .55rem;border-radius:999px;border:1px solid var(--line);background:var(--glass-subtle);color:var(--tx2)}
+.badge.ind{border-color:rgba(14,116,144,0.4);background:rgba(14,116,144,0.09);color:#0b5c72}
+.ev{margin:.55rem 0 0;padding:0 0 0 1.05rem}
+.ev li{margin:.34rem 0;text-wrap:pretty}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:.85rem 0 0}
+@media (max-width:56rem){.two{grid-template-columns:1fr}}
+.side{background:var(--glass-subtle);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem}
+.side h4{margin:0 0 .35rem;font-size:.95rem}
+.side .who{font-size:.8rem;color:var(--tx2);margin:0 0 .5rem}
+.quiet{background:var(--glass-subtle);border:1px dashed var(--line);border-radius:var(--r);padding:1.05rem 1.15rem}
+.quiet h2{font-size:1.08rem;color:var(--tx2);max-width:none}
+.quiet p,.card p,.card h3,.side p,.side h4{max-width:none}
+.quiet{width:100%}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--glass-strong);margin:1rem 0 0}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.9rem}
+caption{text-align:left;padding:.85rem 1rem .1rem;font-size:.82rem;color:var(--tx2)}
+th,td{text-align:left;padding:.6rem 1rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--tx2);font-weight:700}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+.s-up{color:var(--good);font-weight:700}
+.s-dn{color:var(--warn);font-weight:700}
+.s-fl{color:var(--tx2);font-weight:700}
+ol.crit{margin:.6rem 0 0;padding-left:1.15rem}
+ol.crit li{margin:.5rem 0;max-width:none}
+footer{margin:3rem 0 0;border-top:1px solid var(--line);background:var(--glass-subtle)}
+footer .wrap{padding-top:1.6rem;padding-bottom:2.4rem}
+footer h2{font-size:.98rem;margin:0 0 .5rem}
+footer p,footer li{font-size:.86rem;color:var(--tx2);max-width:none}
+footer ul{margin:.4rem 0;padding-left:1.15rem}
+.fine{font-size:.8rem;color:var(--tx2);margin-top:1.3rem}
+@media print{body{background:#fff}.card,.stat,.tw{box-shadow:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" style="position:absolute;left:-9999px;top:0;background:#fff;padding:.6rem 1rem;border-radius:8px;z-index:9" onfocus="">Skip to content</a>
+<header class="masthead">
+ <div class="wrap mast-in">
+  <div>
+   <a class="brand" href="/ai-digest/">Modern <span>Marvel</span></a>
+   <div class="credit">The AI Digest. Designed by Rich Nichols.</div>
+  </div>
+  <nav aria-label="Sections"><ul><li><a href="/ai-digest/">Current edition</a></li><li><a href="/ai-digest/archive/">Archive</a></li><li><a href="/ai-digest/about.html">About</a></li></ul></nav>
+ </div>
+</header>
+<div class="varbar"><div class="wrap"><b>Standard view.</b> The design-experiment generator is on a scheduled pause, keeping the focus entirely on the core data.</div></div>
+<main id="main"><div class="wrap">
+
+<p class="eyebrow">404</p>
+<h1 class="lede">That page is not here</h1>
+<p class="standfirst">The link may be from an edition that was never published, or it may be mistyped. Editions are permanent once published and are never removed, so an edition link that worked before still works.</p>
+<p style="margin-top:1.4rem"><a href="/ai-digest/">Read the current edition</a>, or <a href="/ai-digest/archive/">browse the archive</a>.</p>
+
+</div></main>
+<footer><div class="wrap">
+
+<h2>How this edition was assembled</h2>
+<p>Seven newsletters reported inside the rolling seven-day window to September 1, 2026: four aggregators (TLDR AI, GenAI Works, The Rundown AI, Superhuman AI) and three primary analysis titles (Import AI, Cook's Playbooks, The CFO Desk). One aggregator title on the source list has published nothing since August 1 and contributed nothing.</p>
+<ul>
+<li><b>Convergence floor:</b> met. Seven publishers and both independence classes reported inside the window.</li>
+<li><b>Independent evidence:</b> only two publishers supplied any. The CFO Desk published on cadence and contributed none, because its single tagged item was a paid placement and the sponsored rule removes those before independence is counted.</li>
+<li><b>Volume:</b> 216 raw sightings. Every figure on this page is reported after collapse, never as a raw count alone.</li>
+<li><b>Sponsored:</b> 32 of 216 sightings, 14.8 percent, were paid placements. They count toward volume and never toward publisher or independence counts.</li>
+<li><b>Known gap:</b> a scheduled capture did not run on August 31 and was recovered by hand on September 1. No edition was lost, but the record shows the gap.</li>
+</ul>
+<p class="fine">Modern Marvel is a personal design practice. Views are the author's own and are not those of any employer. Nothing here is investment, legal, or professional advice. Designed by Rich Nichols.</p>
+
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Richard Nichols · Modern Marvel</title>
+<meta name="description" content="I build systems that compound. Operating model design, regulatory implementation and applied AI leverage, by Richard Nichols.">
+<meta name="author" content="Richard Nichols">
+<link rel="canonical" href="https://modernmarvel.io/">
+<meta name="theme-color" content="#0A0806">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Modern Marvel">
+<meta property="og:title" content="Richard Nichols · Modern Marvel">
+<meta property="og:description" content="I build systems that compound. Operating model design, regulatory implementation and applied AI leverage.">
+<meta property="og:url" content="https://modernmarvel.io/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0806'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23C08A3E' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:dark;
+
+    --void:#0A0806;
+    --shadow:#1A150C;      /* was #13100B: cards were 1.05:1 against the page */
+    --umber:#2B2419;
+    --ash:#968B7C;
+    --bone:#F1EADC;
+    --ochre:#C08A3E;
+    --dust:#8C8274;        /* replaces #6B6255 / #5E564A, both of which failed AA */
+    --edge:#6E6350;        /* separators that carry meaning: 3.39:1 on --void */
+
+    --serif:'Instrument Serif',Georgia,serif;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+
+    --gut:clamp(1.5rem,6vw,6rem);
+    --rule:1px solid #3D3527;   /* was rgba(43,36,25,.9): 1.30:1, effectively invisible */
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    background:var(--void);
+    color:var(--bone);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---- the single light source ---- */
+  .raking-light{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(120% 90% at 8% -10%, rgba(192,138,62,.16) 0%, rgba(192,138,62,.05) 32%, transparent 62%),
+      radial-gradient(90% 70% at 4% 0%, rgba(241,234,220,.07) 0%, transparent 55%);
+    opacity:0; animation:bloom 2.2s ease-out .1s forwards;
+  }
+  @keyframes bloom{to{opacity:1}}
+
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    opacity:.045; mix-blend-mode:overlay;
+  }
+
+  .page{position:relative; z-index:2}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 var(--gut)}
+
+  /* ---- masthead ---- */
+  .masthead{
+    display:flex; justify-content:space-between; align-items:center;
+    gap:1rem 1.75rem; flex-wrap:wrap;
+    padding:.5rem 0; font-family:var(--mono);
+    font-size:.6875rem; letter-spacing:.22em; text-transform:uppercase;
+  }
+  .masthead .mark{color:var(--bone); display:inline-flex; align-items:center; min-height:44px}
+  .masthead nav{display:flex; gap:1.5rem}
+  .masthead a{
+    color:var(--ash); text-decoration:none; transition:color .3s;
+    display:inline-flex; align-items:center; min-height:44px;  /* was ~18px tall */
+  }
+  .masthead a:hover,.masthead a:focus-visible{color:var(--ochre)}
+
+  /* ---- hero ---- */
+  .hero{padding:clamp(3rem,14vh,9rem) 0 clamp(4rem,12vh,8rem)}
+
+  .eyebrow{
+    font-family:var(--mono); font-size:.6875rem; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--ochre); margin-bottom:1.75rem;
+  }
+
+  .name{
+    font-family:var(--serif); font-weight:400;
+    font-size:clamp(3rem,11.5vw,7.5rem); line-height:.92;
+    letter-spacing:-.015em; margin-bottom:.35em;
+    /* light falls across the type, lit edge to shadow edge */
+    /* the rake still falls across the type, but it now stops at a legible tone:
+       the old #4A4034 tail measured 1.97:1 and the end of the surname vanished */
+    background:linear-gradient(104deg,#FFFBF3 0%,var(--bone) 24%,#C8BCA8 66%,#A89B87 92%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+
+  .thesis{
+    font-family:var(--serif); font-style:italic; font-weight:400;
+    font-size:clamp(1.5rem,4.6vw,2.6rem); line-height:1.2;
+    color:var(--ochre); margin-bottom:1.75rem; letter-spacing:-.01em;
+  }
+
+  .lede{max-width:47ch; color:var(--ash); font-size:1.0625rem}
+  .lede + .lede{margin-top:1.15rem}
+  .lede strong{color:var(--bone); font-weight:400}
+
+  .actions{display:flex; flex-wrap:wrap; gap:1.5rem 2.25rem; margin-top:2.75rem; align-items:center}
+
+  .btn{
+    font-family:var(--mono); font-size:.75rem; letter-spacing:.16em;
+    text-transform:uppercase; text-decoration:none; color:var(--void);
+    background:var(--bone); padding:.95rem 1.6rem;
+    transition:background .3s,transform .3s;
+  }
+  .btn:hover,.btn:focus-visible{background:var(--ochre); transform:translateY(-2px)}
+
+  .btn-quiet{
+    font-family:var(--mono); font-size:.75rem; letter-spacing:.16em;
+    text-transform:uppercase; text-decoration:none; color:var(--ash);
+    border-bottom:1px solid var(--edge); padding-bottom:.35rem;  /* --umber was 1.30:1 */
+    display:inline-flex; align-items:flex-end; min-height:44px;
+    transition:color .3s,border-color .3s;
+  }
+  .btn-quiet:hover,.btn-quiet:focus-visible{color:var(--bone); border-color:var(--ochre)}
+
+  /* ---- section scaffolding ---- */
+  .section{padding:clamp(3.5rem,10vh,6.5rem) 0; border-top:var(--rule)}
+
+  .section-label{
+    font-family:var(--mono); font-size:.6875rem; font-weight:400; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--ash); margin-bottom:.9rem;
+  }
+  .section-dek{
+    color:var(--ash); max-width:52ch; margin-bottom:3rem; font-size:1rem;
+  }
+
+  /* ---- work ---- */
+  /* three items should read as three: the old separator was 1.19:1 against the card */
+  .work{display:grid; gap:1px; background:var(--edge); border:1px solid var(--edge)}
+
+  .card{
+    position:relative; background:var(--shadow);
+    padding:clamp(1.75rem,4.5vw,3rem);
+    transition:background .5s;
+  }
+  /* the lit edge brightens on the side facing the light */
+  .card::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(100deg,rgba(192,138,62,.09) 0%,transparent 42%);
+    opacity:0; transition:opacity .5s;
+  }
+  .card:hover,.card:focus-within{background:#171309}
+  .card:hover::before,.card:focus-within::before{opacity:1}
+
+  .card-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap:1rem; flex-wrap:wrap; margin-bottom:1.25rem;
+  }
+
+  .card-leverage{
+    font-family:var(--mono); font-size:.625rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--ochre); white-space:nowrap;
+  }
+
+  .card h3{
+    font-family:var(--serif); font-weight:400;
+    font-size:clamp(1.6rem,4.2vw,2.15rem); line-height:1.1;
+    letter-spacing:-.01em; color:var(--bone);
+  }
+
+  .card p{color:var(--ash); max-width:58ch; margin-bottom:1.25rem}
+
+  .card h3 a{color:inherit; text-decoration:none;
+    /* padding + negative margin lifts the hit area to 44px without moving anything */
+    display:inline-block; padding:.5rem 0; margin:-.5rem 0;
+    background-image:linear-gradient(var(--ochre),var(--ochre));
+    background-size:0% 1px; background-repeat:no-repeat; background-position:0 calc(100% - .5rem);
+    transition:background-size .35s}
+  .card h3 a:hover,.card h3 a:focus-visible{background-size:100% 1px}
+
+  .card-go{
+    display:inline-flex; align-items:center; gap:.5rem; min-height:44px;
+    font-family:var(--mono); font-size:.6875rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ochre); text-decoration:none; margin-top:.5rem;
+  }
+  .card-go span{border-bottom:1px solid var(--edge); padding-bottom:.3rem; transition:border-color .3s}
+  .card-go:hover span,.card-go:focus-visible span{border-color:var(--ochre)}
+
+  .card .why{
+    color:var(--bone); border-left:1px solid var(--ochre);
+    padding-left:1.1rem; font-size:.9375rem; max-width:56ch;
+  }
+
+  .tags{
+    display:flex; flex-wrap:wrap; gap:.5rem .9rem; margin-top:1.75rem;
+    font-family:var(--mono); font-size:.75rem; color:var(--dust);   /* #6B6255 was 3.17:1 */
+  }
+  .tags span::after{content:' ·'; color:var(--umber)}
+  .tags span:last-child::after{content:''}
+
+  /* ---- background ---- */
+  .bio-grid{display:grid; gap:3rem}
+  .bio p{color:var(--ash); max-width:56ch; margin-bottom:1.25rem}
+  .bio p strong{color:var(--bone); font-weight:400}
+
+  .cap-group + .cap-group{margin-top:2.25rem}
+  .cap-label{
+    font-family:var(--mono); font-size:.625rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--dust); margin-bottom:.75rem;
+  }
+  .certs{font-family:var(--mono); font-size:.8125rem; color:var(--ash); line-height:1.95}
+  .capabilities{list-style:none}
+  .capabilities li{
+    font-family:var(--mono); font-size:.8125rem; color:var(--ash);
+    padding:.85rem 0; border-bottom:var(--rule);
+  }
+  .capabilities li:first-child{border-top:var(--rule)}
+
+  /* ---- contact ---- */
+  .contact{border-top:var(--rule); padding:clamp(4rem,12vh,7rem) 0}
+  .contact .thesis{margin-bottom:1.5rem; color:var(--bone); font-weight:400}
+  .contact .actions{margin-top:0}
+  .contact p{color:var(--ash); max-width:44ch; margin-bottom:2.5rem}
+
+  footer{
+    border-top:var(--rule); padding:2.25rem 0 3.5rem;
+    font-family:var(--mono); font-size:.75rem; color:var(--dust);   /* #5E564A was 2.77:1 */
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  }
+
+  /* ---- scroll reveal ----
+     Content is visible by default. JavaScript opts in to animating it by putting
+     .js on <html>. Previously the content started at opacity:0 and only appeared
+     if the IntersectionObserver fired, so print, share-to-PDF and any script
+     failure produced an empty page. */
+  .reveal{opacity:1; transform:none}
+  html.js .reveal{opacity:0; transform:translateY(18px); transition:opacity .9s ease-out,transform .9s ease-out}
+  html.js .reveal.lit{opacity:1; transform:none}
+
+  :focus-visible{outline:2px solid var(--ochre); outline-offset:4px}
+
+  @media(min-width:820px){
+    .bio-grid{grid-template-columns:1.35fr .8fr; gap:5rem}
+    .card{padding:3.25rem}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before{animation:none!important; transition:none!important}
+    .reveal,html.js .reveal{opacity:1!important; transform:none!important}
+    .raking-light{opacity:1}
+  }
+
+  /* ---- print / share-to-PDF ----
+     A dark page printed on white paper is unreadable, and the reveal never fires
+     for anything below the fold. Both are fixed here. */
+  @media print{
+    html.js .reveal{opacity:1!important; transform:none!important}
+    .raking-light,.grain{display:none!important}
+    body{background:#fff; color:#1A1713; font-size:11pt}
+    .name{background:none!important; -webkit-text-fill-color:#0A0806!important; color:#0A0806!important}
+    .thesis,.eyebrow,.card-leverage,.card-go{color:#6B4A17!important}
+    .lede,.card p,.bio p,.contact p,.capabilities li,.section-dek,.section-label{color:#3A342B!important}
+    .lede strong,.bio p strong,.card .why,.card h3,.masthead .mark{color:#0A0806!important}
+    .card{background:#fff!important; break-inside:avoid}
+    /* a card breaking to the next page used to expose the grid's own background
+       as a large grey block: keep the container white and draw the divisions
+       on the cards themselves */
+    .work{background:#fff!important; border:1px solid #B9B0A0!important; gap:0!important}
+    .card+.card{border-top:1px solid #B9B0A0}
+    .section,.contact,footer{break-inside:avoid}
+    .tags,footer{color:#5A5347!important}
+    .btn{background:#0A0806!important; color:#fff!important}
+    .card h3 a::after{display:none}
+    a[href^="http"]::after{content:" (" attr(href) ")"; font-family:var(--mono); font-size:8pt; color:#5A5347}
+  }
+</style>
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+
+<div class="raking-light"></div>
+
+<svg class="grain" aria-hidden="true">
+  <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" stitchTiles="stitch"/></filter>
+  <rect width="100%" height="100%" filter="url(#noise)"/>
+</svg>
+
+<div class="page">
+  <div class="wrap">
+
+    <header class="masthead">
+      <span class="mark">Modern Marvel</span>
+      <nav>
+        <a href="https://www.linkedin.com/in/richnichols" rel="me">LinkedIn</a>
+        <a href="#contact">Get in touch</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Retirement products · Operating models · AI leverage</p>
+      <h1 class="name">Richard Nichols</h1>
+      <p class="thesis">I build systems that compound.</p>
+      <p class="lede">
+        Director and strategic planning lead at a Fortune 100 financial services provider:
+        retirement product strategy, regulatory implementation, and the operating-model
+        change required to actually ship any of it.
+      </p>
+      <p class="lede">
+        Outside that I build tools, on the same thesis: <strong>the output matters less than
+        the method that produces it.</strong> Three of them are below, and all three are running.
+      </p>
+      <div class="actions">
+        <a class="btn" href="#work">See the work</a>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <h2 class="section-label">The work</h2>
+      <p class="section-dek">
+        Three things I built and kept running. Each one is a different argument about method.
+      </p>
+
+      <div class="work">
+
+        <article class="card reveal">
+          <div class="card-head">
+            <h3><a href="https://modernmarvel.io/ai-digest/">AI Digest Engine</a></h3>
+            <span class="card-leverage">Compounds daily</span>
+          </div>
+          <p>
+            A scheduled pipeline that reads every AI newsletter landing in my inbox, extracts
+            themes and tools into a persistent ledger, and emails back a designed brief each
+            morning. On Fridays it synthesizes the week and publishes a public edition.
+          </p>
+          <p class="why">
+            Most people consume AI news and forget it. This accumulates it. The ledger knows
+            what it saw last month, so it can tell me what's actually new.
+          </p>
+          <div class="tags">
+            <span>Scheduled agents</span><span>Gmail ingestion</span><span>Persistent state</span><span>Automated publishing</span>
+          </div>
+          <a class="card-go" href="https://modernmarvel.io/ai-digest/"><span>Read this week's edition &rarr;</span></a>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-head">
+            <h3>Method Assets</h3>
+            <span class="card-leverage">Compounds across projects</span>
+          </div>
+          <p>
+            A library of packaged, reusable capabilities: adversarial document review, data
+            structuring and reconciliation pipelines, financial scenario modeling. Each one
+            written once and callable on demand.
+          </p>
+          <p class="why">
+            The difference between a good analyst and a compounding one is whether the method
+            survives the project it was invented for.
+          </p>
+          <div class="tags">
+            <span>Skill design</span><span>Prompt architecture</span><span>Workflow automation</span>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-head">
+            <h3>Offline-First Training App</h3>
+            <span class="card-leverage">Runs without a network</span>
+          </div>
+          <p>
+            A 60-day program lifted out of a spreadsheet and rebuilt as an installable
+            progressive web app: full local persistence, no backend, no account, nothing to
+            log into.
+          </p>
+          <p class="why">
+            Built for a gym with no signal. Constraints are the most honest product spec
+            you'll ever get handed.
+          </p>
+          <div class="tags">
+            <span>PWA</span><span>Local persistence</span><span>Zero dependencies</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="section" id="background">
+      <h2 class="section-label">Background</h2>
+      <p class="section-dek">Where the day job overlaps with the tools.</p>
+      <div class="bio-grid">
+        <div class="bio reveal">
+          <p>
+            Sixteen years turning regulation and operating-model change into things that
+            actually ship, the last decade of it in financial services. Today that means
+            retirement: a SECURE 2.0 implementation program, wealth-management and
+            operating-model strategy, and the unglamorous execution work that decides whether a
+            strategy ever reaches a participant. Before retirement it was the enterprise LIBOR
+            transition; before that, standing up program governance and post-merger integration
+            for a de-novo bank.
+          </p>
+          <p>
+            The programs are matrixed, the delivery is part Agile and part waterfall because
+            that is what large regulated firms actually run, and most of the work sits in the
+            gap between a decision and the thing shipping, which is where operating
+            models either hold or quietly fail.
+          </p>
+          <p>
+            <strong>What I've come to care about is leverage.</strong> Not tools for their own
+            sake: the narrower question of what it takes to make expertise repeatable, so
+            that solving a problem once means having solved a category of problems. Inside a
+            regulated firm that question has a second half: whether the method can be
+            evidenced afterwards. Anything that can't be is a demo.
+          </p>
+          <p>
+            So I build. The three above started as my own bottlenecks. I was reading more than
+            I could retain, rebuilding the same analysis from scratch, watching a good program
+            die inside a spreadsheet. Each is a test of the same idea: the durable asset is
+            the method, not the output. One runs on a schedule and keeps a
+            ledger. One is a library I call rather than rewrite. One runs entirely offline,
+            because the constraint was a gym with no signal. All three are built to be audited
+            rather than admired.
+          </p>
+          <p>
+            An MBA and a BA in economics, both from SUNY Albany, and a senior leaders program
+            at Wharton's Aresty Institute. Away from the job I'm a residential landlord and
+            spent four years as treasurer of an HOA board, the same thesis in slower
+            motion, with real money and no undo button. I live in New Jersey with my wife, son
+            and dog, and build in New York.
+          </p>
+        </div>
+        <div class="reveal">
+          <div class="cap-group">
+            <p class="cap-label">What I work on</p>
+            <ul class="capabilities">
+              <li>Enterprise PMO &amp; program governance</li>
+              <li>Operating model design</li>
+              <li>Annuity &amp; statutory mechanics</li>
+              <li>Regulatory implementation</li>
+              <li>Post-merger integration</li>
+              <li>Agile &amp; operating-model change</li>
+              <li>AI systems &amp; workflow design</li>
+            </ul>
+          </div>
+          <div class="cap-group">
+            <p class="cap-label">Certifications</p>
+            <p class="certs">PMP &middot; PSM &middot; SAFe PO/PM &middot; SAFe 4 Agilist</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2 class="thesis">Working on something adjacent?</h2>
+      <p>
+        Retirement products, operating models, or getting real leverage out of AI inside a
+        large organization: those are the conversations I say yes to.
+      </p>
+      <div class="actions">
+        <a class="btn" href="mailto:rich@modernmarvel.io">Email me</a>
+        <a class="btn-quiet" href="https://www.linkedin.com/in/richnichols" rel="me">LinkedIn</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 Richard Nichols</span>
+      <span>Views here are my own and do not represent my employer.</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  // If the browser can't observe, or the user prefers reduced motion, leave the
+  // content in its default visible state rather than hiding it.
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('lit'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    // Anything still unlit after 3s (never scrolled to, tab restored, observer
+    // starved) is shown anyway. The content is never permanently hidden.
+    setTimeout(function () {
+      document.querySelectorAll('.reveal:not(.lit)').forEach(function (el) { el.classList.add('lit'); });
+    }, 3000);
+  } else {
+    document.documentElement.classList.remove('js');
+  }
+  // Printing must never capture a half-revealed page.
+  window.addEventListener('beforeprint', function () {
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('lit'); });
+  });
+</script>
+
+</body>
+</html>

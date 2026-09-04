@@ -1,0 +1,15 @@
+name = "modernmarvel-home"
+compatibility_date = "2026-09-01"
+
+# Static-assets Worker. No server code: index.html is served directly.
+[assets]
+directory = "./public"
+
+# EXACT route only. The apex root is served by this Worker; every other path
+# on modernmarvel.io (including /ai-digest*) continues to be served by the
+# existing `modernmarvel-io` Worker, untouched.
+#
+# Do NOT widen this to "modernmarvel.io/*" — that takes the digest dark.
+[[routes]]
+pattern = "modernmarvel.io/"
+zone_name = "modernmarvel.io"

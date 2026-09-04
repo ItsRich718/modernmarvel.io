@@ -1,0 +1,30 @@
+{
+  // Modern Marvel: the AI Digest, served from modernmarvel.io/ai-digest*
+  //
+  // This is an assets-only Worker. There is no server code: Cloudflare serves
+  // the files in ./public directly. Nothing here runs JavaScript at request time.
+  //
+  // The worker name changed from "modernmavel-io" to "modernmarvel-io" when the
+  // corrected domain was acquired on 2026-08-20. Workers cannot be renamed in
+  // place, so this deploy CREATES a new worker. The old one is deleted by hand
+  // at the end, after the new one is confirmed serving. See HOW-TO-PUBLISH.md.
+
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "modernmarvel-io",
+  "compatibility_date": "2026-08-28",
+
+  "assets": {
+    "directory": "./public",
+    // Serves public/404.html for any path that does not match a file.
+    "not_found_handling": "404-page"
+  },
+
+  // Scoped deliberately to /ai-digest*. Do NOT widen this to modernmarvel.io/*:
+  // the rest of the apex is not managed by this project.
+  "routes": [
+    {
+      "pattern": "modernmarvel.io/ai-digest*",
+      "zone_name": "modernmarvel.io"
+    }
+  ]
+}

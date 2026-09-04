@@ -19,9 +19,30 @@
     "not_found_handling": "404-page"
   },
 
-  // Scoped deliberately to /ai-digest*. Do NOT widen this to modernmarvel.io/*:
-  // the rest of the apex is not managed by this project.
+  // BOTH entries below already exist in Cloudflare. They are declared here
+  // because Wrangler treats this file as the source of truth for routing and
+  // will reconcile the account to match it on every deploy. An entry that is
+  // live but missing from this list can be removed by a routine deploy.
+  //
+  // The custom_domain entry is load-bearing for the WHOLE SITE. A Custom
+  // Domain owns the DNS record for modernmarvel.io. Delete it and the apex
+  // stops resolving, which also strands the modernmarvel-home Worker, whose
+  // route has no DNS record left to attach to. Removing this line takes down
+  // the landing page as well as the digest.
+  //
+  // Because this Worker holds the apex hostname, it answers every path that no
+  // more specific route claims -- that is why an unknown URL such as
+  // modernmarvel.io/nonsense returns this Worker's public/404.html rather than
+  // anything belonging to modernmarvel-home.
+  //
+  // Do NOT widen the route pattern to modernmarvel.io/*: that would out-specify
+  // the modernmarvel-home route on "modernmarvel.io/" and take the landing page
+  // dark.
   "routes": [
+    {
+      "pattern": "modernmarvel.io",
+      "custom_domain": true
+    },
     {
       "pattern": "modernmarvel.io/ai-digest*",
       "zone_name": "modernmarvel.io"

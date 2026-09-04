@@ -75,11 +75,21 @@ Replace the contents of `digest/public/ai-digest/`, leave the dated file in
 `archive/` alone, add the new dated copy alongside it, then deploy `digest`.
 Once an edition is published it is permanent and is never edited again.
 
-## Routes
+## Routes — read before your first deploy
 
-The routes are already configured in Cloudflare and are declared in each
-folder's config file. Do not widen either one — see the README for why. If you
-ever need to confirm what is actually live, open the Worker in the Cloudflare
-dashboard under **Settings → Domains & Routes** and compare. Cloudflare is
-correct by definition while the site is working; change the config file to
-match it, not the other way around.
+Every route and Custom Domain that is live in Cloudflare is declared in the
+config files. That is deliberate and it must stay that way: Wrangler reconciles
+the account to match the config on each deploy, so an entry that is live but
+missing from the file can be deleted by a routine deploy.
+
+The entry that matters most is the Custom Domain on `modernmarvel.io` in
+`digest/wrangler.jsonc`. It owns the DNS record for the apex. Losing it takes
+down the landing page as well as the digest. See the README for the full
+explanation.
+
+Do not widen either pattern to `modernmarvel.io/*`.
+
+If you need to confirm what is actually live, open each Worker in the Cloudflare
+dashboard under **Settings → Domains & Routes**. While the site is working,
+Cloudflare is correct by definition — change the config file to match it, not
+the other way around, and commit that change.
